@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk
+FROM adoptopenjdk/openjdk11:alpine-jre
 ARG artifact=target/dptweb-1.0.war
 
 WORKDIR /opt/app

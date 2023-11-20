@@ -32,12 +32,12 @@ pipeline {
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "jagadeeshponthagiri/ultimate-cicd:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = " devops/Dockerfile"
+        // DOCKERFILE_LOCATION = "."
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps {
         script {
-            sh 'Dockerfile && docker build -t ${DOCKER_IMAGE} .'
+            sh 'master/Dockerfile && docker build -t ${DOCKER_IMAGE} .'
             def dockerImage = docker.image("${DOCKER_IMAGE}")
             docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
                 dockerImage.push()

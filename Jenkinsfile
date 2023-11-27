@@ -29,11 +29,15 @@ pipeline {
         stage('docker build and push'){
             environment{
               DOCKER_REGISTRY_CREDENTIALS = credentials('docker-cred')
-              DOCKER_IMAGE_NAME = 'jagadeeshponthagiri/ultimate-cicd:${BUILD_NUMBER}'    
+              DOCKER_IMAGE_NAME = 'jagadeeshponthagiri/ultimate-cicd:${BUILD_NUMBER}'
+              DOCKER_REGISTRY_CREDENTIALS_USR = DOCKER_REGISTRY_CREDENTIALS_USR
+              DOCKER_REGISTRY_CREDENTIALS_PSW = DOCKER_REGISTRY_CREDENTIALS_PSW  
             }
             steps{
               script{
-                sh 'docker build -t ${DOCKER_IMAGE}'
+                docker.build("${DOCKER_IMAGE_NAME}", "-f path/to/Dockerfile .")
+                maskPasswords("${DOCKER_REGISTRY_CREDENTIALS_USR}") 
+                maskPasswords("${DOCKER_REGISTRY_CREDENTIALS_PSW}")  
                 docker.withRegistry('https://index.docker.io/v1/', "DOCKER-cred") {
                   docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
                 }

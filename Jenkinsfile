@@ -33,8 +33,7 @@ pipeline {
             }
             steps{
               script{
-                git url :  'https://github.com/Jagadeeshponthagiri/devops'
-                sh 'cd Dockerjenk/springboot/Dockerfile && docker build -t ${DOCKER_IMAGE} .'
+                sh 'docker build -t ${DOCKER_IMAGE} . -f .'
                 docker.withRegistry('https://index.docker.io/v1/', "DOCKER-cred") {
                   docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
                 }

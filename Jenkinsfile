@@ -17,7 +17,7 @@ pipeline {
         }
         stage('static code analysis') {
             environment{
-                SONAR_URL = "http://44.204.227.198:9000"
+                SONAR_URL = "http://34.201.51.40:9000"
                 PATH = "/opt/apache-maven-3.9.5/bin:$PATH"
             }
             steps{
@@ -34,8 +34,8 @@ pipeline {
             }
             steps{
               script{
-                docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f path/to/Dockerfile .")
-                docker.withRegistry('https://your-docker-registry-url', DOCKER_REGISTRY_CREDENTIALS) {
+                docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f .")
+                docker.withRegistry('https://index.docker.io/v1/', DOCKER_REGISTRY_CREDENTIALS) {
                   docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
                 }
               }

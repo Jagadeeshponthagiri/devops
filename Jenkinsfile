@@ -35,7 +35,7 @@ pipeline {
             steps{
               script{
                 docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f .")
-                docker.withRegistry('https://index.docker.io/v1/', DOCKER_REGISTRY_CREDENTIALS) {
+                docker.withRegistry('https://index.docker.io/v1/', "DOCKER-cred") {
                   docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
                 }
               }

@@ -33,7 +33,7 @@ pipeline {
             }
             steps{
               script{
-                sh 'Dockerfile && docker build -t ${DOCKER_IMAGE} .'
+                sh 'cd devops/Dockerfile && docker build -t ${DOCKER_IMAGE} .'
                 docker.withRegistry('https://index.docker.io/v1/', "DOCKER-cred") {
                   docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
                 }

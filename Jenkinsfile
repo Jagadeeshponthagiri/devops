@@ -28,9 +28,9 @@ pipeline {
           }
         stage('docker build and push'){
             environment{
-              DOCKER_REGISTRY_CREDENTIALS = credentials('docker-registry-credentials-id')
-              DOCKER_IMAGE_NAME = 'your-docker-image-name'
-              DOCKER_IMAGE_TAG = 'latest'    
+              DOCKER_REGISTRY_CREDENTIALS = credentials('docker-cred')
+              DOCKER_IMAGE_NAME = 'ultimate'
+              DOCKER_IMAGE_TAG = '${BUILD_NUMBER}'    
             }
             steps{
               script{

@@ -17,7 +17,7 @@ pipeline {
         }
         stage('static code analysis') {
             environment{
-                SONAR_URL = "http://34.201.51.40:9000"
+                SONAR_URL = "http://44.204.227.198:9000"
                 PATH = "/opt/apache-maven-3.9.5/bin:$PATH"
             }
             steps{
@@ -26,20 +26,28 @@ pipeline {
                 } 
             }
           }
-        stage('docker build and push'){
+        stage('docker build'){
             environment{
-              DOCKER_REGISTRY_CREDENTIALS = credentials('docker-cred')
-              DOCKER_IMAGE_NAME = 'jagadeeshponthagiri/ultimate-cicd:${BUILD_NUMBER}' 
+              DOCKER_HUB_CREDENTIALS = 'docker-cred'
+              DOCKER_IMAGE_NAME = 'demo-job'
+              DOCKER_HUB_REPO = 'jagadeeshponthagiri/index.docker.io'    
             }
             steps{
               script{
-                docker.build("${DOCKER_IMAGE_NAME}", "-f path/to/Dockerfile .") 
-                docker.withRegistry('https://index.docker.io/v1/', "DOCKER-cred") {
-                  docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
+                sh "docker build -t ${DOCKER_IMAGE_NAME}"
+                }
+              }
+        stage('docker push'){
+            steps{
+              script{
+                withDockerRegistry(credentialsId: "${DOCKER_HUB_CREDENTIALS}", url: '') {
+                  sh "docker tag ${DOCKER_IMAGE_NAME} ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                  sh "docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
                 }
               }
             }
+           }
+          }
         }
-     }        
-    }
+     } 
 

@@ -45,7 +45,7 @@ pipeline {
                   sh "docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
                 }
               }
-            }
-           }
           }
-        }
+       }
+    }
+}

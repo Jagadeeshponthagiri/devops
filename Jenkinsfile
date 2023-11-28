@@ -23,7 +23,7 @@ pipeline {
         }
         stage('static code analysis') {
             environment{
-                SONAR_URL = "http://44.204.227.198:9000"
+                SONAR_URL = "http://44.207.3.111:9000"
                 PATH = "/opt/apache-maven-3.9.5/bin:$PATH"
             }
             steps{

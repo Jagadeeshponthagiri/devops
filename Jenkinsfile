@@ -39,5 +39,15 @@ pipeline {
               }
            }
         }
+        stage('docker push'){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: "${DOCKER_HUB_CREDENTIALS}", url: '') {
+                        sh "docker tag ${DOCKER_IMAGE_NAME} ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                        sh "docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                    }
+                }
+            }
+        }
      } 
  }

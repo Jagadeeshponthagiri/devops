@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment{
+        DOCKER_HUB_CREDENTIALS = 'docker-cred'
+        DOCKER_IMAGE_NAME = 'demo-job'
+        DOCKER_HUB_REPO = 'jagadeeshponthagiri/index.docker.io'    
+    }
+
     stages {
         stage('git') {
             steps {
@@ -17,7 +23,7 @@ pipeline {
         }
         stage('static code analysis') {
             environment{
-                SONAR_URL = "http://44.207.3.111:9000"
+                SONAR_URL = "http://44.204.227.198:9000"
                 PATH = "/opt/apache-maven-3.9.5/bin:$PATH"
             }
             steps{
@@ -26,5 +32,21 @@ pipeline {
                 } 
             }
           }
+        stage('docker build'){
+            steps{
+              script{
+                sh "docker build -t ${DOCKER_IMAGE_NAME}"
+                }
+              }
+        stage('docker push'){
+            steps{
+              script{
+                withDockerRegistry(credentialsId: "${DOCKER_HUB_CREDENTIALS}", url: '') {
+                  sh "docker tag ${DOCKER_IMAGE_NAME} ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                  sh "docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                }
+              }
+            }
+         }
     }
-}
+ }
